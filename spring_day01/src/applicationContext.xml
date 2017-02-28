@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+        <!-- ioc入门 -->
+        <bean id="user" class="com.wmr.springDay01.User" scope="prototype"></bean>
+        <!-- 使用静态工厂创建实例 -->
+        <bean id="bean21" class="com.wmr.springDay01.beans.Bean2Factory" factory-method="getBean2"></bean>
+        <!-- 创建事例工厂的对象 -->
+        <bean id="bean2Factory2" class="com.wmr.springDay01.beans.Bean2Factory2"></bean>
+        <bean id="bean2" factory-bean="bean2Factory2" factory-method="getBean2"></bean>
+        <!-- 有参构造 注入属性-->
+        <bean id="prop1" class="com.wmr.springDay01.beans.ProptitiesTest">
+        	<constructor-arg name="name" value="test1111"></constructor-arg>
+        </bean>
+        
+        <!-- set方法注入属性-->
+        <bean id="prop2" class="com.wmr.springDay01.beans.ProptitiesTest2">
+        	<!-- 注入属性值 -->
+        	<property name="name" value="prop2Name"/>
+        </bean>
+        <!-- 注入对象类型的属性 -->
+        <!-- 配置service和dao的对象 -->
+        <bean id="dao" class="com.wmr.springDay01.beans.UserDao"></bean>
+        <bean id="userService" class="com.wmr.springDay01.beans.UserService">
+        	<!-- 注入dao对象 -->
+        	<!-- name属性值：service类里面的属性名
+        		ref值：dao配置bean标签中的id
+        	 -->
+        	<property name="dao" ref="dao"></property>
+        </bean>
+        
+        <!-- p空间属性注入 -->
+        <bean id="p" class="com.wmr.springDay01.beans.Person" p:pname="personName"></bean>
+        
+        <!-- 复杂类型属性值注入 -->
+        <bean id="p2" class="com.wmr.springDay01.beans.Person2">
+        	<!-- 数组 -->
+        	<property name="argss">
+        		<list>
+        			<value>aa</value>
+        			<value>ab</value>
+        			<value>ac</value>
+        		</list>
+        	</property>
+        	<!-- list -->
+        	<property name="lit">
+        		<list>
+        			<value>la</value>
+        			<value>lb</value>
+        			<value>lc</value>
+        		</list>
+        	</property>
+        	<!-- map -->
+        	<property name="map">
+        		<map>
+        			<entry key="ma" value="ma"></entry>
+        			<entry key="mb" value="mb"></entry>
+        			<entry key="mc" value="mc"></entry>
+        		</map>
+        	</property>
+        	<property name="props">
+        		<props>
+        			<prop key="driverclass">com.mysql.jdbc.Driver</prop>
+        			<prop key="username">root</prop>
+        		</props>
+        	</property>
+        	
+        </bean>
+</beans>
