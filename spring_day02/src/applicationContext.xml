@@ -31,4 +31,10 @@
 				<aop:around method="around1" pointcut-ref="pointcut1"/>
 			</aop:aspect>
 		</aop:config>
+		
+		<!-- 注解方式创建对象 -->
+		<bean id="bookAop" class="com.wmr.springDay02.aop.annotation.Book"></bean>
+		<bean id="myBookAop" class="com.wmr.springDay02.aop.annotation.MyBook"></bean>
+		<!-- 开启aop扫面 -->
+		<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 </beans>
