@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 配置c3p0连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 诸如属性值 -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql:///test" />
+		<property name="user" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<!-- 注入datesource属性 -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 转账环境 创建对象，并注入相关对象的相关属性 -->
+	<bean id="acount" class="com.wmr.springDay03.tx.Acount"></bean>
+	<bean id="acountService" class="com.wmr.springDay03.tx.AcountService">
+		<property name="acountDao" ref="acountDao" />
+	</bean>
+	<bean id="acountDao" class="com.wmr.springDay03.tx.AcountDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
+	<!-- 声明式事务处理 配置文件方式 使用aop思想 -->
+	<!-- 第一步 -->
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 第二步开启事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+</beans>
